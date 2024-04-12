@@ -27,7 +27,7 @@ const winningCombo = [
 
 const squares = document.querySelectorAll('.square');
 // Turn to an IFFE
-startGame();
+
 
 function startGame() {
     // DELETE LATER??
@@ -52,3 +52,10 @@ function playerTurn(squareID, player){
     gameboard[squareID] = player;
     document.getElementById(squareID).innerHTML = player;
 }
+
+const startButton = document.querySelector('#start-button');
+startButton.addEventListener('click', () => {
+    let playerName = document.querySelector('#player1').value;
+    console.log(`${playerName} is ready to play`)
+    startGame();
+})
