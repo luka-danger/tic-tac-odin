@@ -21,9 +21,12 @@ const Gameboard = (() => {
         displayBoard();
     }
 
+    const getGameboard = () => gameboard;
+
     return {
         displayBoard,
-        updateBoard
+        updateBoard,
+        getGameboard
     }
 })();
 
@@ -55,7 +58,9 @@ const Game = (() => {
         // instead of "s", "q", "u"...etc
         // Return [1] to only return index number
         let index = event.target.id.split("-")[1];
-        Gameboard.updateBoard(index, players[currentPlayerIndex].symbol);
+        if (Gameboard.getGameboard()[index] !== "")
+            return 
+            Gameboard.updateBoard(index, players[currentPlayerIndex].symbol);
         currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
     }
 
