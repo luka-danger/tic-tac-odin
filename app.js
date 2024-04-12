@@ -17,7 +17,16 @@ const winningCombo = [
 
 // Gameboard IIFE
 const Gameboard = (() => {
-    
+    const startGame = () => {
+        const squares = document.querySelectorAll('.square');
+        squares.forEach((square) => {
+            square.addEventListener('click', Game.handleClick)
+        })
+    }
+
+    return {
+        startGame
+    }
 })();
 
 // Create Player Factory
@@ -28,9 +37,23 @@ const createPlayer = (playerName, playerSymbol) => {
     }
 }
 
-function startGame() {
-    const squares = document.querySelectorAll('.cell');
-    squares.forEach((square) => {
-        square.addEventListener('click', handleClick)
-    })
-}
+// Game IIFE
+const Game = (() => {
+    const handleClick = () => {
+        let index;
+        console.log((`Square clicked`))
+
+    }
+
+    return {
+        handleClick
+    }
+})();
+
+
+const startButton = document.querySelector('#start-button');
+startButton.addEventListener('click', () => {
+    let myName = document.querySelector('#player1').value;
+    console.log(`${myName} started the game!`)
+    Gameboard.startGame();
+})
