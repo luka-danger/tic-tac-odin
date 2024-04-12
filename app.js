@@ -1,5 +1,14 @@
 // Gameboard Factory Function / IIFE
 
+const displayController = (() => {
+    const displayMessage = (message) => {
+        document.querySelector('#message').innerHTML = message;
+    }
+    return {
+        displayMessage
+    }
+})();
+
 const Gameboard = (() => {
     // Empty array with length of 9 
     let gameboard = ["", "", "", "", "", "", "", "", ""];
@@ -64,7 +73,40 @@ const Game = (() => {
             return 
         }
         Gameboard.updateBoard(index, players[currentPlayerIndex].symbol);
+
+        if (checkForWin(Gameboard.getGameboard(), players[currentPlayerIndex].symbol)) {
+            gameOver = true;
+            displayController.displayMessage(`${players[currentPlayerIndex].playerName} wins!`)
+        }
+        else if (checkForTie(Gameboard.getGameboard())){
+            gameOver = true;
+            displayController.displayMessage("It's a tie")
+        }
         currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
+    }
+
+    function checkForWin(board) {
+        const winningCombo = [
+            [0, 1, 2],
+            [3, 4, 5],
+            [6, 7, 8],
+            [0, 3, 6],
+            [1, 4, 7],
+            [2, 5, 8],
+            [0, 4, 8],
+            [2, 4, 6]
+        ]
+        for (let i = 0; i < winningCombo.length; i++) {
+            const [a, b, c] = winningCombo[i];
+            if (board[a] && board[a] === board[b] &&  board[a] === board[c]) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    function checkForTie(board) {
+        return board.every(cell => cell !== "")
     }
 
     const restart = () => {
@@ -72,6 +114,7 @@ const Game = (() => {
             Gameboard.updateBoard(i, "");
         }
         Gameboard.displayBoard();
+        document.querySelector('#message').innerText = "";
     }
 
     return {
