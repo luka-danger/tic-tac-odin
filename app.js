@@ -10,10 +10,6 @@ const Gameboard = (() => {
             boardHTML += `<div class="square" id="square-${index}">${square}</div>`
         })
         document.querySelector('#gameboard').innerHTML = boardHTML;
-        const squares = document.querySelectorAll('.square');
-        squares.forEach((square) => {
-            square.addEventListener('click', Game.handleClick);
-        })
     }
 
     return {
@@ -41,10 +37,18 @@ const Game = (() => {
         currentPlayerIndex = 0;
         gameOver = false;
         Gameboard.displayBoard();
+        const squares = document.querySelectorAll('.square');
+        squares.forEach((square) => {
+            square.addEventListener('click', handleClick);
+        })
     }
 
     const handleClick = (event) => {
-        console.log(`You clicked ${event.target.id}`)
+        // Split separates words ex: "Square", 1
+        // instead of "s", "q", "u"...etc
+        // Return [1] to only return index number
+        let index = event.target.id.split("-")[1];
+        console.log(index)
     }
 
     return {
