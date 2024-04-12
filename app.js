@@ -1,6 +1,6 @@
 // Gameboard Factory Function / IIFE
 
-const gameBoard = (() => {
+const Gameboard = (() => {
     // Empty array with length of 9 
     let gameboard = ["", "", "", "", "", "", "", "", ""];
     
@@ -9,17 +9,43 @@ const gameBoard = (() => {
         gameboard.forEach((grid, index) => {
             boardHTML += `<div class="grid" id="grid-${index}">${grid}</div>`
         })
+        document.querySelector('#gameboard').innerHTML = boardHTML;
     }
-    document.querySelector('#gameboard').innerHTML = boardHTML;
 
     return {
         displayBoard,
     }
 })();
 
+const createPlayer = (playerName, symbol) => {
+    return {
+        playerName,
+        symbol
+    }
+}
+
+const Game = (() => {
+    let players = [];
+    let currentPlayerIndex;
+    let gameOver;
+
+    const startGame = () => {
+        players = [
+            createPlayer(document.querySelector("#player1").value, "X"),
+            createPlayer(document.querySelector("#player2").value, "O")
+        ]
+        currentPlayerIndex = 0;
+        gameOver = false;
+        Gameboard.displayBoard();
+    }
+    return {
+        startGame,
+    }
+})();
+
 const startButton = document.querySelector('#start-button');
 startButton.addEventListener('click', () => {
-    console.log("The game has started!")
+    Game.startGame();
 })
 
 const restartButton = document.querySelector('#restart-button');
