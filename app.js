@@ -6,10 +6,14 @@ const Gameboard = (() => {
     
     const displayBoard = () => {
         let boardHTML = "";
-        gameboard.forEach((grid, index) => {
-            boardHTML += `<div class="grid" id="grid-${index}">${grid}</div>`
+        gameboard.forEach((square, index) => {
+            boardHTML += `<div class="square" id="square-${index}">${square}</div>`
         })
         document.querySelector('#gameboard').innerHTML = boardHTML;
+        const squares = document.querySelectorAll('.square');
+        squares.forEach((square) => {
+            square.addEventListener('click', Game.handleClick);
+        })
     }
 
     return {
@@ -38,8 +42,14 @@ const Game = (() => {
         gameOver = false;
         Gameboard.displayBoard();
     }
+
+    const handleClick = (event) => {
+        console.log(`You clicked ${event.target.id}`)
+    }
+
     return {
         startGame,
+        handleClick
     }
 })();
 
@@ -52,6 +62,7 @@ const restartButton = document.querySelector('#restart-button');
 restartButton.addEventListener('click', () => {
     console.log("You reset the game...");
 })
+
 
 
 
