@@ -1,8 +1,19 @@
-// New Code
+// Create Player Factor 
+const createPlayer = (playerName, playerSymbol) => {
+    return {
+        playerName,
+        playerSymbol
+    }
+}
 
-let gameBoard; 
+// Game IIFE
+const Game = (() => {
+
+})();
+
+let gameboard; 
 const player1 = 'X';
-const computerPlayer = 'O';
+const computer = 'O';
 const winningCombo = [
     [0, 1, 2],
     [3, 4, 5],
@@ -14,46 +25,24 @@ const winningCombo = [
     [2, 4, 6]
 ]
 
+const squares = document.querySelectorAll('.square');
+// Turn to an IFFE
+startGame();
 
-// Gameboard IIFE
-const Gameboard = (() => {
-    const startGame = () => {
-        const squares = document.querySelectorAll('.square');
-        squares.forEach((square) => {
-            square.addEventListener('click', Game.handleClick)
-        })
-    }
+function startGame() {
+    // DELETE LATER??
+    document.querySelector('.endgame').style.display = "none";
 
-    return {
-        startGame
-    }
-})();
-
-// Create Player Factory
-const createPlayer = (playerName, playerSymbol) => {
-    return {
-        playerName,
-        playerSymbol
-    }
+    gameboard = Array.from(Array(9).keys());
+    console.log(gameboard);
+    // change to a forEach
+    squares.forEach((square) => {
+        square.innerText = '';
+        square.style.removeProperty('background-color');
+        square.addEventListener('click', handleClick)
+    })
 }
 
-// Game IIFE
-const Game = (() => {
-    const handleClick = () => {
-        let index;
-        console.log((`Square clicked`))
-
-    }
-
-    return {
-        handleClick
-    }
-})();
-
-
-const startButton = document.querySelector('#start-button');
-startButton.addEventListener('click', () => {
-    let myName = document.querySelector('#player1').value;
-    console.log(`${myName} started the game!`)
-    Gameboard.startGame();
-})
+function handleClick(square) {
+    console.log(square.target.id)
+}
