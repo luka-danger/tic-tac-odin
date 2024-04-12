@@ -23,6 +23,8 @@ td {
     width: 100px;
     text-align: center;
     vertical-align: middle;
+    font-family: Norse-Bold, sans-serif;
+    font-size: 60px;  
 }
 
 table {
