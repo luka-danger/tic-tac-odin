@@ -58,9 +58,12 @@ const Game = (() => {
         // instead of "s", "q", "u"...etc
         // Return [1] to only return index number
         let index = event.target.id.split("-")[1];
-        if (Gameboard.getGameboard()[index] !== "")
+
+        // Prevent non-empty squares from being changed
+        if (Gameboard.getGameboard()[index] !== "") {
             return 
-            Gameboard.updateBoard(index, players[currentPlayerIndex].symbol);
+        }
+        Gameboard.updateBoard(index, players[currentPlayerIndex].symbol);
         currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
     }
 
