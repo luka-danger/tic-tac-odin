@@ -44,5 +44,11 @@ function startGame() {
 }
 
 function handleClick(square) {
-    console.log(square.target.id)
+    console.log(`Square ${square.target.id} clicked.`);
+    playerTurn(square.target.id, player1)
+}
+
+function playerTurn(squareID, player){
+    gameboard[squareID] = player;
+    document.getElementById(squareID).innerHTML = player;
 }
