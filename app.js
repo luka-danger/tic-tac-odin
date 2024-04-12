@@ -10,10 +10,20 @@ const Gameboard = (() => {
             boardHTML += `<div class="square" id="square-${index}">${square}</div>`
         })
         document.querySelector('#gameboard').innerHTML = boardHTML;
+        const squares = document.querySelectorAll('.square');
+        squares.forEach((square) => {
+            square.addEventListener('click', Game.handleClick);
+        })
+    }
+
+    const updateBoard = (index, value) => {
+        gameboard[index] = value;
+        displayBoard();
     }
 
     return {
         displayBoard,
+        updateBoard
     }
 })();
 
@@ -37,10 +47,7 @@ const Game = (() => {
         currentPlayerIndex = 0;
         gameOver = false;
         Gameboard.displayBoard();
-        const squares = document.querySelectorAll('.square');
-        squares.forEach((square) => {
-            square.addEventListener('click', handleClick);
-        })
+        
     }
 
     const handleClick = (event) => {
@@ -48,7 +55,8 @@ const Game = (() => {
         // instead of "s", "q", "u"...etc
         // Return [1] to only return index number
         let index = event.target.id.split("-")[1];
-        console.log(index)
+        Gameboard.updateBoard(index, players[currentPlayerIndex].symbol);
+        currentPlayerIndex = currentPlayerIndex === 0 ? 1 : 0;
     }
 
     return {
