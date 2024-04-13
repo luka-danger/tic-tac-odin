@@ -25,6 +25,7 @@ const winningCombo = [
 ]
 
 const squares = document.querySelectorAll('.square');
+startGame();
 // Turn to an IFFE
 
 
@@ -40,21 +41,19 @@ function startGame() {
         square.addEventListener('click', handleClick);
     })
 }
-startGame();
+
 
 function handleClick(square) {
     // If TypeOf Id is a number, it means that nobody has played in square
     if (typeof gameboard[square.target.id] == 'number') {
         playerTurn(square.target.id, player1);
     }
-        if (!checkTie()) {
-            playerTurn(computerPlay(), computer);
-        }
+        if (!checkForWin(gameboard, player1) && !checkTie()) playerTurn(computerPlay(), computer);
 }
 
 function playerTurn(squareID, player){
     gameboard[squareID] = player;
-    document.getElementById(squareID).innerHTML = player;
+    document.getElementById(squareID).innerText = player;
     let gameWon = checkForWin(gameboard, player)
     if (gameWon) {
         gameOver(gameWon) 
@@ -63,7 +62,8 @@ function playerTurn(squareID, player){
 
 
 function checkForWin(board, player) {
-	let plays = board.reduce((a, e, i) => (e === player) ? a.concat(i) : a, []);
+	let plays = board.reduce((a, e, i) => 
+        (e === player) ? a.concat(i) : a, []);
 	let gameWon = null;
 	for (let [index, win] of winningCombo.entries()) {
 		if (win.every(elem => plays.indexOf(elem) > -1)) {
@@ -101,7 +101,8 @@ function computerPlay() {
 function checkTie() {
     if (emptySquares().length == 0) {
         squares.forEach((square) => {
-            square.backgroundColor = 'gray'
+            square.backgroundColor = 'gray';
+            square.removeEventListener('click', handleClick)
         })
         declareWinner("Tie Game");
         return true;
@@ -112,13 +113,13 @@ function checkTie() {
 // Minimax Algorithm
 
 function minimax(newBoard, player) {
-    let availableSpots = emptySquares(newBoard);
+    let availableSpots = emptySquares();
 
-    if (checkForWin(newBoard, player)) {
+    if (checkForWin(newBoard, player1)) {
         return {score: -10};
     }
-    else if (checkForWin(newBoard, player)) {
-        return {score: 20};
+    else if (checkForWin(newBoard, computer)) {
+        return {score: 10};
     }
     else if (availableSpots.length === 0) {
         return {score: 0}
@@ -130,7 +131,7 @@ function minimax(newBoard, player) {
         newBoard[availableSpots[i]] = player;
 
         if (player == computer) {
-            let result = minimax(newBoard, player);
+            let result = minimax(newBoard, player1);
             move.score = result.score; 
         }
         else {
