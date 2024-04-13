@@ -37,58 +37,52 @@ function startGame() {
     squares.forEach((square) => {
         square.innerText = '';
         square.style.removeProperty('background-color');
-        square.addEventListener('click', handleClick)
+        square.addEventListener('click', handleClick);
     })
 }
 startGame();
 
 function handleClick(square) {
     // If TypeOf Id is a number, it means that nobody has played in square
-    if (typeof gameboard[square.target.id] =='number') {
+    if (typeof gameboard[square.target.id] == 'number') {
         playerTurn(square.target.id, player1);
     }
-    if (!checkTie()) playerTurn(easyMode(), computer);
+        if (!checkTie()) {
+            playerTurn(easyMode(), computer);
+        }
 }
 
 function playerTurn(squareID, player){
     gameboard[squareID] = player;
     document.getElementById(squareID).innerHTML = player;
-    let gameWon = checkForWin(gameboard)
+    let gameWon = checkForWin(gameboard, player)
     if (gameWon) {
         gameOver(gameWon) 
     } 
 }
 
-function checkForWin(board) {
-    const winningCombo = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6]
-    ]
-    for (let i = 0; i < winningCombo.length; i++) {
-        const [a, b, c] = winningCombo[i];
-        if (board[a] && board[a] === board[b] &&  board[a] === board[c]) {
-            return true;
-        }
-    }
-    return false;
+
+function checkForWin(board, player) {
+	let plays = board.reduce((a, e, i) => (e === player) ? a.concat(i) : a, []);
+	let gameWon = null;
+	for (let [index, win] of winningCombo.entries()) {
+		if (win.every(elem => plays.indexOf(elem) > -1)) {
+			gameWon = {index: index, player: player};
+			break;
+		}
+	}
+	return gameWon;
 }
 
-function gameOver() {
-    squares.forEach((square) => {
-        square.removeEventListener('click', handleClick)
-    })
-    declareWinner(gameWon.player == player1 ? "You win!" : "You lose.") 
-}
-
-function declareWinner(who) {
-    document.querySelector('.endgame').style.display = "block";
-    document.querySelector('.endgame .text').innerText = who;
+function gameOver(gameWon) {
+	for (let index of winningCombo[gameWon.index]) {
+		document.getElementById(index).style.backgroundColor =
+			gameWon.player == player1 ? "blue" : "red";
+	}
+	squares.forEach((square) => {
+		square.removeEventListener('click', handleClick);
+	})
+	declareWinner(gameWon.player == player1 ? "You win!" : "Loser");
 }
 
 function emptySquares() {
