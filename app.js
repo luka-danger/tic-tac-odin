@@ -47,7 +47,7 @@ function handleClick(square) {
     if (typeof gameboard[square.target.id] =='number') {
         playerTurn(square.target.id, player1);
     }
-    if (!checkTie()) turn(bestSpot(), computer);
+    if (!checkTie()) playerTurn(easyMode(), computer);
 }
 
 function playerTurn(squareID, player){
@@ -83,15 +83,20 @@ function gameOver() {
     squares.forEach((square) => {
         square.removeEventListener('click', handleClick)
     })
+    declareWinner(gameWon.player == player1 ? "You win!" : "You lose.") 
 }
 
+function declareWinner(who) {
+    document.querySelector('.endgame').style.display = "block";
+    document.querySelector('.endgame .text').innerText = who;
+}
 
 function emptySquares() {
     return gameboard.filter(s => typeof s == 'number')
 }
 
 // Play in first emptySquare
-function bestSpot() {
+function easyMode() {
     return emptySquares()[0];
 }
 

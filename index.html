@@ -11,6 +11,10 @@
     <div class="header">
         <h1>Tic-Tac-Odin</h1>
     </div>
+
+    <div class="endgame">
+        <div id="message"></div>
+    </div>
     
     <table>
         <tr>
@@ -30,14 +34,14 @@
         </tr>
     </table>
 
-    <div class="endgame">
-        <div id="message"></div>
-    </div>
-
     <div id="controls">
-        <input type="text" id="player1" placeholder="Enter User Name">
-        <button id="start-button">Start Game</button>
-        <button id="restart-button">Restart Game</button>
+        <button id="replay-button">Replay</button>
+        <form class="form">
+            <select name="levels" id="levels">
+                <option value="easy">Easy Mode</option>
+                <option value="unbeatable">Unwinnable Mode</option>
+            </select>
+        </form>
     </div>
 </body>
 </html>
