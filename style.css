@@ -66,12 +66,12 @@ table tr td:last-child {
 
 .endgame {
     display: none;
-    width: 200px;
-    top: 120px;
-    background-color: rgba(205,133,63, 0.8);
     position: absolute;
-    left: 50%;
-    margin-left: -100px;
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%); 
+    width: 200px;
+    background-color: rgba(185, 185, 185, 0.72);
     padding-top: 50px;
     padding-bottom: 50px;
     text-align: center;
@@ -79,3 +79,10 @@ table tr td:last-child {
     color: white;
     font-size: 2em;
   }
+
+  @media screen and (max-width: 600px) {
+    .endgame {
+        width: 150px;
+        font-size: 1.5em;
+    }
+}
