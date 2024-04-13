@@ -48,7 +48,7 @@ function handleClick(square) {
         playerTurn(square.target.id, player1);
     }
         if (!checkTie()) {
-            playerTurn(easyMode(), computer);
+            playerTurn(computerPlay(), computer);
         }
 }
 
@@ -77,33 +77,96 @@ function checkForWin(board, player) {
 function gameOver(gameWon) {
 	for (let index of winningCombo[gameWon.index]) {
 		document.getElementById(index).style.backgroundColor =
-			gameWon.player == player1 ? "blue" : "red";
+			gameWon.player == player1 ? "gray" : "gray";
 	}
 	squares.forEach((square) => {
 		square.removeEventListener('click', handleClick);
 	})
-	declareWinner(gameWon.player == player1 ? "You win!" : "Loser");
+	declareWinner(gameWon.player == player1 ? "You win!" : "Loser!");
+}
+
+function declareWinner(who) {
+    document.querySelector('.endgame').style.display = "block";
+    document.querySelector('.endgame #message').innerText = who;
 }
 
 function emptySquares() {
     return gameboard.filter(s => typeof s == 'number')
 }
 
-// Play in first emptySquare
-function easyMode() {
-    return emptySquares()[0];
+function computerPlay() {
+    return minimax(gameboard, computer).index;
 }
 
 function checkTie() {
     if (emptySquares().length == 0) {
         squares.forEach((square) => {
-            square.backgroundColor = 'green'
+            square.backgroundColor = 'gray'
         })
         declareWinner("Tie Game");
         return true;
     }
     return false;
 }
+
+// Minimax Algorithm
+
+function minimax(newBoard, player) {
+    let availableSpots = emptySquares(newBoard);
+
+    if (checkForWin(newBoard, player)) {
+        return {score: -10};
+    }
+    else if (checkForWin(newBoard, player)) {
+        return {score: 20};
+    }
+    else if (availableSpots.length === 0) {
+        return {score: 0}
+    }
+    let moves = [];
+    for (let i = 0; i < availableSpots.length; i++) {
+        let move = {};
+        move.index = newBoard[availableSpots[i]];
+        newBoard[availableSpots[i]] = player;
+
+        if (player == computer) {
+            let result = minimax(newBoard, player);
+            move.score = result.score; 
+        }
+        else {
+            let result = minimax(newBoard, computer);
+            move.score = result.score;
+        }
+
+        newBoard[availableSpots[i]] = move.index;
+
+        moves.push(move);
+    }
+    
+    let bestMove; 
+    if (player === computer) {
+        let bestScore = -10000;
+        for (let i = 0; i < moves.length; i++) {
+            if(moves[i].score > bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    } 
+    else {
+        let bestScore = 10000;
+        for (let i = 0; i < moves.length; i++) {
+            if (moves[i].score < bestScore) {
+                bestScore = moves[i].score;
+                bestMove = i;
+            }
+        }
+    }
+
+    return moves[bestMove];
+}
+
+// Replay Button 
 
 const replayButton = document.querySelector('#replay-button');
 replayButton.addEventListener('click', () => {
